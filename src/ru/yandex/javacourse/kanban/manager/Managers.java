@@ -83,11 +83,14 @@ public class Managers implements TaskManager {
     @Override
     public void deleteAllSubTasks() {
         subTaskController.deleteAll();
+        subTaskController.deleteSubTaskOfEpic();
+        subTaskController.refreshStatusEpicWhenDeleteAllSubTask();
     }
 
     @Override
     public void deleteAllEpics() {
         epicController.deleteAll();
+        subTaskController.deleteAll();
     }
 
     @Override
@@ -97,6 +100,7 @@ public class Managers implements TaskManager {
 
     @Override
     public void deleteEpicById(Integer id) {
+        subTaskController.findSubTasksByEpicID(epicController.findById(id));
         epicController.deleteById(id);
     }
 

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EpicController {
-    HashMap<Integer, Epic> epics = new HashMap<>();
-    Integer counterIDEpics = 0;
+    protected HashMap<Integer, Epic> epics = new HashMap<>();
+    private Integer counterIDEpics = 0;
 
     public Epic findById(Integer id) {
         return epics.get(id);

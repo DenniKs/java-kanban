@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class SubTaskController {
     private Integer counterIDSubTasks = 0;
     private HashMap<Integer, SubTask> subTasks = new HashMap<>();
-    EpicController epicController;
+    private EpicController epicController;
 
     public SubTaskController(EpicController epicController) {
         this.epicController = epicController;
@@ -51,15 +51,25 @@ public class SubTaskController {
         final SubTask deletedTask = subTasks.get(id);
         epicController.epics.get(deletedTask.getEpicID()).getSubTasks().remove(deletedTask);
         subTasks.remove(id);
+        refreshStatus(deletedTask);
         return deletedTask;
     }
 
     public void deleteAll() {
         subTasks.clear();
     }
+    public void deleteSubTaskOfEpic() {
+        for (Epic subTask : epicController.epics.values()) {
+            subTask.getSubTasks().clear();
+        }
+    }
 
     public ArrayList<SubTask> findAllOfEpic(Epic epic) {
         return epicController.epics.get(epic.getId()).getSubTasks();
+    }
+
+    public void findSubTasksByEpicID(Epic epic) {
+        subTasks.values().removeIf(subTask -> subTask.getEpicID().equals(epic.getId()));
     }
 
     public void refreshStatus(SubTask task) {
@@ -79,6 +89,12 @@ public class SubTaskController {
             epicController.epics.get(task.getEpicID()).setStatus(Status.DONE);
         } else {
             epicController.epics.get(task.getEpicID()).setStatus(Status.IN_PROGRESS);
+        }
+    }
+
+    public void refreshStatusEpicWhenDeleteAllSubTask() {
+        for (Epic epic : epicController.epics.values()) {
+            epic.setStatus(Status.NEW);
         }
     }
 }

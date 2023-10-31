@@ -4,10 +4,10 @@ import java.util.Objects;
 import static ru.yandex.javacourse.kanban.tasks.Status.NEW;
 
 public class Task {
-    protected String name;
-    protected String description;
-    protected Integer id;
-    protected Status status;
+    private String name;
+    private String description;
+    private Integer id;
+    private Status status;
 
     public Task() {
         this("Задача", null, -1, NEW);
