@@ -41,8 +41,17 @@ public class SubTaskController {
         originalTask.setDescription(task.getDescription());
         originalTask.setName(task.getName());
         originalTask.setStatus(task.getStatus());
-        epicController.epics.get(task.getEpicID()).removeSubTask(originalTask);
-        epicController.epics.get(task.getEpicID()).addSubTask(task);
+
+        if (task.getEpicID().equals(originalTask.getEpicID())) {
+            epicController.epics.get(task.getEpicID()).removeSubTask(originalTask);
+            epicController.epics.get(task.getEpicID()).addSubTask(task);
+        } else {
+            originalTask.setEpicID(task.getEpicID());
+            epicController.epics.get(originalTask.getEpicID()).removeSubTask(originalTask);
+            epicController.epics.get(task.getEpicID()).addSubTask(task);
+            refreshStatus(originalTask);
+        }
+
         refreshStatus(task);
         return originalTask;
     }

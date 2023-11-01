@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class Managers implements TaskManager {
 
-    TaskController taskController = new TaskController();
-    EpicController epicController = new EpicController();
-    SubTaskController subTaskController = new SubTaskController(epicController);
+    private TaskController taskController = new TaskController();
+    private EpicController epicController = new EpicController();
+    private SubTaskController subTaskController = new SubTaskController(epicController);
 
     @Override
     public ArrayList<Task> findAllTasks() {
