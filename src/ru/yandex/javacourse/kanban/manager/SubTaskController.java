@@ -20,7 +20,7 @@ public class SubTaskController {
         final SubTask newSubTask = new SubTask(subTask.getName(), subTask.getDescription(), ++counterIDSubTasks, epic.getId());
         if (!subTasks.containsKey(newSubTask.getId())) {
             subTasks.put(newSubTask.getId(), newSubTask);
-            epicController.epics.get(epic.getId()).getSubTasks().add(/*newSubTask.getId(),*/ newSubTask);
+            epicController.epics.get(epic.getId()).addSubTask(/*newSubTask.getId(),*/ newSubTask);
         } else {
             System.out.println("Задача с таким ID уже существует");
             return null;
@@ -41,15 +41,15 @@ public class SubTaskController {
         originalTask.setDescription(task.getDescription());
         originalTask.setName(task.getName());
         originalTask.setStatus(task.getStatus());
-        epicController.epics.get(task.getEpicID()).getSubTasks().remove(originalTask);
-        epicController.epics.get(task.getEpicID()).getSubTasks().add(task);
+        epicController.epics.get(task.getEpicID()).removeSubTask(originalTask);
+        epicController.epics.get(task.getEpicID()).addSubTask(task);
         refreshStatus(task);
         return originalTask;
     }
 
     public SubTask deleteById(Integer id) {
         final SubTask deletedTask = subTasks.get(id);
-        epicController.epics.get(deletedTask.getEpicID()).getSubTasks().remove(deletedTask);
+        epicController.epics.get(deletedTask.getEpicID()).removeSubTask(deletedTask);
         subTasks.remove(id);
         refreshStatus(deletedTask);
         return deletedTask;
@@ -60,7 +60,7 @@ public class SubTaskController {
     }
     public void deleteSubTaskOfEpic() {
         for (Epic subTask : epicController.epics.values()) {
-            subTask.getSubTasks().clear();
+            subTask.clearSubTasks();
         }
     }
 

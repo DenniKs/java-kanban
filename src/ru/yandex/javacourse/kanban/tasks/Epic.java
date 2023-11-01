@@ -9,22 +9,27 @@ public class Epic extends Task {
         super(name, description, id);
     }
 
-    /* Если делаю как сказано в замечание, то код перестает работать, т.к. мне надо этот список либо очищать, либо удалять
-     строку из списка, т.е. мне на каждую операцию прописывать отдельный метод? */
     public ArrayList<SubTask> getSubTasks() {
-        return subTasks;
+        return new ArrayList<>(subTasks);
     }
 
     public void setSubTasks(ArrayList<SubTask> subTasks) {
-        this.subTasks = subTasks;
+        this.subTasks = new ArrayList<>(subTasks);
     }
 
-//    public ArrayList<SubTask> getSubTasks() {
-//        return new ArrayList<>(subTasks);
-//    }
-//
-//    public void setSubTasks(ArrayList<SubTask> subTasks) {
-//        this.subTasks = new ArrayList<>(subTasks);
-//    }
+    // Метод для добавления подзадачи
+    public void addSubTask(SubTask subTask) {
+        this.subTasks.add(subTask);
+    }
+
+    // Метод для удаления подзадачи
+    public boolean removeSubTask(SubTask subTask) {
+        return this.subTasks.remove(subTask);
+    }
+
+    // Метод для полной очистки списка
+    public void clearSubTasks() {
+        this.subTasks.clear();
+    }
 
 }
