@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TaskController {
+    public HashMap<Integer, Task> getTasks() {
+        return tasks;
+    }
+
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private Integer counterIDTasks = 0;
 

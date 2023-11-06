@@ -1,14 +1,12 @@
 package ru.yandex.javacourse.kanban;
 
-import ru.yandex.javacourse.kanban.manager.Managers;
 import static ru.yandex.javacourse.kanban.tasks.Status.IN_PROGRESS;
 
-import ru.yandex.javacourse.kanban.tasks.Epic;
-import ru.yandex.javacourse.kanban.tasks.Status;
-import ru.yandex.javacourse.kanban.tasks.SubTask;
+import ru.yandex.javacourse.kanban.manager.Managers;
+import ru.yandex.javacourse.kanban.manager.TaskManager;
 import ru.yandex.javacourse.kanban.tasks.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -16,7 +14,7 @@ public class Main {
         System.out.println("_____________________________");
 
         System.out.println("Проводим проверку методов.");
-        Managers taskManager = new Managers();
+        TaskManager taskManager = Managers.getDefault();
 
         System.out.println("_____________________________");
         System.out.println();
@@ -48,7 +46,7 @@ public class Main {
         System.out.print("1.2 ");
         System.out.println("findAllTask() запуск.");
         System.out.println();
-        ArrayList<Task> taskArrayList = taskManager.findAllTasks();
+        List<Task> taskArrayList = taskManager.findAllTasks();
         System.out.println("Печатаем список задач:");
         for (Task value : taskArrayList) {
             System.out.println(value);
@@ -84,6 +82,9 @@ public class Main {
         else
             System.out.println("Метод updateTaskById() не работает");
 
+        System.out.println();
+        System.out.println("Печатаем историю задач:");
+
         System.out.println("_____________________________");
         System.out.println();
 
@@ -101,13 +102,27 @@ public class Main {
             System.out.println(value);
         }
         System.out.println();
-        if (taskManager.findTaskById(2) == null)
+        if (taskManager.findTaskById(2) == null) {
             System.out.println("Задача удалена. deleteTaskById() работает.");
-        else
+        }
+        else {
             System.out.println("deleteTaskById() не работает.");
+        }
 
-        // Дописать тесты Epic в проекте 4 спринта
-        // Дописать тесты subTask в проекте 4 спринта
+        System.out.println("_____________________________");
+        System.out.println();
 
+        System.out.print("1.5 ");
+        System.out.println("getHistory() запуск.");
+        taskManager.findTaskById(3);
+        taskManager.findTaskById(1);
+        taskManager.findTaskById(3);
+        System.out.println();
+        System.out.println("Печатаем историю задач:");
+
+        List<Task> tasks = taskManager.getHistory();
+        for (var t : tasks) {
+            System.out.println(t);
+        }
     }
 }
