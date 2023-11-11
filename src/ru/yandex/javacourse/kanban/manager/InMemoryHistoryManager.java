@@ -5,39 +5,95 @@ import ru.yandex.javacourse.kanban.tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    static class historyRecord {
-        protected Task task;
-        private historyRecord prev;
-        private historyRecord next;
 
-        public historyRecord(Task task) {
+    private static class HistoryRecord {
+        private Task task;
+        private HistoryRecord prev;
+        private HistoryRecord next;
+
+        private HistoryRecord(Task task) {
             this.task = task;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            HistoryRecord that = (HistoryRecord) o;
+            return task.equals(that.task);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(task);
+        }
+
     }
 
-    private historyRecord head;
-    private historyRecord last;
+    private HistoryRecord head;
+    private HistoryRecord last;
 
-    private HashMap<Integer, historyRecord> listHistory = new HashMap<>();
-
-    public HashMap<Integer, historyRecord> getListHistory() {
-        return listHistory;
-    }
+    private HashMap<Integer, HistoryRecord> historyRecordMap = new HashMap<>();
 
     @Override
     public void add(Task task) {
         if (task == null) {
             return;
         }
+        if (historyRecordMap.size() >= 10) {
+            remove(head.task.getId());
+        }
         addLast(task);
+    }
+
+    @Override
+    public void remove(int id) {
+        final HistoryRecord oldHistoryRecord = historyRecordMap.remove(id);
+        if (oldHistoryRecord != null) {
+            if (oldHistoryRecord == head) {
+                head = oldHistoryRecord.next;
+                if (head != null) {
+                    head.prev = null;
+                }
+            } else if (oldHistoryRecord == last) {
+                last = oldHistoryRecord.prev;
+                if (last != null) {
+                    last.next = null;
+                }
+            } else {
+                oldHistoryRecord.prev.next = oldHistoryRecord.next;
+                if (oldHistoryRecord.next != null) {
+                    oldHistoryRecord.next.prev = oldHistoryRecord.prev;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void removeAll() {
+        head = null;
+        last = null;
+        historyRecordMap.clear();
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        final List<Task> tasks = new ArrayList<>();
+        HistoryRecord current = head;
+        while (current != null) {
+            tasks.add(current.task);
+            current = current.next;
+        }
+        return tasks;
     }
 
     private void addLast(Task task) {
         remove(task.getId());
 
-        final historyRecord newHistoryRecord = new historyRecord(task);
+        final HistoryRecord newHistoryRecord = new HistoryRecord(task);
         if (head == null) {
             head = newHistoryRecord;
         } else {
@@ -45,40 +101,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             newHistoryRecord.prev = last;
         }
         last = newHistoryRecord;
-        listHistory.put(task.getId(), newHistoryRecord);
-    }
-
-    @Override
-    public void remove(int id) {
-        final historyRecord oldHistoryRecord = listHistory.remove(id);
-        if (oldHistoryRecord != null) {
-            if (oldHistoryRecord == head) {
-                head = oldHistoryRecord.next;
-                last = oldHistoryRecord.next;
-            } else if (oldHistoryRecord == last) {
-                last = oldHistoryRecord.prev;
-                last.next = null;
-            } else {
-                oldHistoryRecord.prev.next = oldHistoryRecord.next;
-            }
-        }
-    }
-
-    @Override
-    public void removeAll() {
-        historyRecord head = null;
-        historyRecord tail = null;
-        HashMap<Integer, historyRecord> map = new HashMap<>();
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        final ArrayList<Task> tasks = new ArrayList<>();
-        historyRecord current = head;
-        while (current != null) {
-            tasks.add(current.task);
-            current = current.next;
-        }
-        return tasks;
+        historyRecordMap.put(task.getId(), newHistoryRecord);
     }
 }

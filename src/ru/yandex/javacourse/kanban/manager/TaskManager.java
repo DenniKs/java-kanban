@@ -43,15 +43,5 @@ public interface TaskManager {
 
     Task deleteTaskById(Integer id);
 
-    // Удаление задачи из истории по ID.
-    void removeFromHistoryById(int id);
-
-    // Получение истории.
     List<Task> getHistory();
-
-    // Добавление задачи в историю.
-    void addInHistory(Task task);
-
-    // Удаление всей истории.
-    void removeAllHistory();
 }

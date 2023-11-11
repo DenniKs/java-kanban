@@ -116,12 +116,14 @@ public class Main {
         System.out.println("getHistory() запуск.");
         taskManager.findTaskById(3);
         taskManager.findTaskById(1);
+        taskManager.findTaskById(4);
         taskManager.findTaskById(3);
+        taskManager.findTaskById(4);
         System.out.println();
         System.out.println("Печатаем историю задач:");
 
-        List<Task> tasks = taskManager.getHistory();
-        for (var t : tasks) {
+        List<Task> historyList = taskManager.getHistory();
+        for (var t : historyList) {
             System.out.println(t);
         }
     }

@@ -12,7 +12,7 @@ public class InMemoryTaskManager implements TaskManager {
     private TaskController taskController = new TaskController();
     private EpicController epicController = new EpicController();
     private SubTaskController subTaskController = new SubTaskController(epicController);
-    private InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+    private HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public ArrayList<Task> findAllTasks() {
@@ -32,21 +32,21 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public SubTask findSubTaskById(Integer id) {
         final SubTask subTask = subTaskController.findById(id);
-        addInHistory(subTask);
+        historyManager.add(subTask);
         return subTask;
     }
 
     @Override
     public Task findTaskById(Integer id) {
         final Task task = taskController.findById(id);
-        addInHistory(task);
+        historyManager.add(task);
         return task;
     }
 
     @Override
     public Epic findEpicById(Integer id) {
         final Epic epic = epicController.findById(id);
-        addInHistory(epic);
+        historyManager.add(epic);
         return epic;
     }
 
@@ -82,11 +82,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTask() {
-        if(!inMemoryHistoryManager.getListHistory().isEmpty()){
-            for (var historyTask : inMemoryHistoryManager.getListHistory().values()) {
+        if(!historyManager.getHistory().isEmpty()){
+            for (var historyTask : historyManager.getHistory()) {
                 for (var task: taskController.getTasks().values()) {
-                    if (task.equals(historyTask.task)) {
-                        inMemoryHistoryManager.remove(historyTask.task.getId());
+                    if (task.equals(historyTask)) {
+                        historyManager.remove(historyTask.getId());
                     }
                 }
             }
@@ -109,40 +109,25 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteSubTaskById(Integer id) {
-        removeFromHistoryById(id);
+        historyManager.remove(id);
         subTaskController.deleteById(id);
     }
 
     @Override
     public void deleteEpicById(Integer id) {
-        removeFromHistoryById(id);
+        historyManager.remove(id);
         subTaskController.findSubTasksByEpicID(epicController.findById(id));
         epicController.deleteById(id);
     }
 
     @Override
     public Task deleteTaskById(Integer id) {
-        removeFromHistoryById(id);
+        historyManager.remove(id);
         return taskController.deleteById(id);
     }
 
-    // Получение истории
+    @Override
     public List<Task> getHistory() {
-        return inMemoryHistoryManager.getHistory();
-    }
-
-    // Удаление всей истории
-    public void removeAllHistory() {
-        inMemoryHistoryManager.removeAll();
-    }
-
-    // Добавление задачи в историю
-    public void addInHistory(Task task) {
-        inMemoryHistoryManager.add(task);
-    }
-
-    // Удаление задачи из истории по ИД
-    public void removeFromHistoryById(int id) {
-        inMemoryHistoryManager.remove(id);
+        return historyManager.getHistory();
     }
 }
