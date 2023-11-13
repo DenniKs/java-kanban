@@ -50,8 +50,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    @Override
-    public void remove(int id) {
+    private void remove(int id) {
         final HistoryRecord oldHistoryRecord = historyRecordMap.remove(id);
         if (oldHistoryRecord != null) {
             if (oldHistoryRecord == head && oldHistoryRecord == last) {
@@ -74,13 +73,6 @@ public class InMemoryHistoryManager implements HistoryManager {
                 }
             }
         }
-    }
-
-    @Override
-    public void removeAll() {
-        head = null;
-        last = null;
-        historyRecordMap.clear();
     }
 
     @Override

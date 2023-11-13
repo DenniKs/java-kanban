@@ -82,15 +82,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTask() {
-        if(!historyManager.getHistory().isEmpty()){
-            for (var historyTask : historyManager.getHistory()) {
-                for (var task: taskController.getTasks().values()) {
-                    if (task.equals(historyTask)) {
-                        historyManager.remove(historyTask.getId());
-                    }
-                }
-            }
-        }
         taskController.deleteAll();
     }
 
@@ -109,20 +100,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteSubTaskById(Integer id) {
-        historyManager.remove(id);
         subTaskController.deleteById(id);
     }
 
     @Override
     public void deleteEpicById(Integer id) {
-        historyManager.remove(id);
         subTaskController.findSubTasksByEpicID(epicController.findById(id));
         epicController.deleteById(id);
     }
 
     @Override
     public Task deleteTaskById(Integer id) {
-        historyManager.remove(id);
         return taskController.deleteById(id);
     }
 
