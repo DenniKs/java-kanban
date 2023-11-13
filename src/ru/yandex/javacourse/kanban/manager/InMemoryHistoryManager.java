@@ -42,18 +42,22 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void add(Task task) {
         if (task == null) {
             return;
+        } else {
+            addLast(task);
+            if (historyRecordMap.size() > 10) {
+                remove(head.task.getId());
+            }
         }
-        if (historyRecordMap.size() >= 10) {
-            remove(head.task.getId());
-        }
-        addLast(task);
     }
 
     @Override
     public void remove(int id) {
         final HistoryRecord oldHistoryRecord = historyRecordMap.remove(id);
         if (oldHistoryRecord != null) {
-            if (oldHistoryRecord == head) {
+            if (oldHistoryRecord == head && oldHistoryRecord == last) {
+                head = null;
+                last = null;
+            } else if (oldHistoryRecord == head) {
                 head = oldHistoryRecord.next;
                 if (head != null) {
                     head.prev = null;

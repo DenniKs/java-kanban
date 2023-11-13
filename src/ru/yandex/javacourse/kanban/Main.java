@@ -126,5 +126,25 @@ public class Main {
         for (var t : historyList) {
             System.out.println(t);
         }
+        System.out.println();
+
+        for (int i = 1; i < 9; i++) {
+            taskManager.addTask(task);
+            taskManager.findTaskById(4 + i);
+        }
+        System.out.println("Печатаем историю задач после добавления и просмотра задач:");
+        System.out.println();
+        List<Task> historyList1 = taskManager.getHistory();
+        for (var t : historyList1) {
+            System.out.println(t);
+        }
+        System.out.println();
+        taskManager.findTaskById(10);
+        System.out.println("Печатаем историю задач после просмотра старой задачи:");
+        System.out.println();
+        List<Task> historyList2 = taskManager.getHistory();
+        for (var t : historyList2) {
+            System.out.println(t);
+        }
     }
 }
