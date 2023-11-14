@@ -42,11 +42,10 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void add(Task task) {
         if (task == null) {
             return;
-        } else {
-            addLast(task);
-            if (historyRecordMap.size() > 10) {
-                remove(head.task.getId());
-            }
+        }
+        addLast(task);
+        if (historyRecordMap.size() > 10) {
+            remove(head.task.getId());
         }
     }
 
@@ -58,19 +57,13 @@ public class InMemoryHistoryManager implements HistoryManager {
                 last = null;
             } else if (oldHistoryRecord == head) {
                 head = oldHistoryRecord.next;
-                if (head != null) {
-                    head.prev = null;
-                }
+                head.prev = null;
             } else if (oldHistoryRecord == last) {
                 last = oldHistoryRecord.prev;
-                if (last != null) {
-                    last.next = null;
-                }
+                last.next = null;
             } else {
                 oldHistoryRecord.prev.next = oldHistoryRecord.next;
-                if (oldHistoryRecord.next != null) {
-                    oldHistoryRecord.next.prev = oldHistoryRecord.prev;
-                }
+                oldHistoryRecord.next.prev = oldHistoryRecord.prev;
             }
         }
     }
