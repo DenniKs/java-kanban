@@ -9,87 +9,120 @@ import java.util.Objects;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private static class HistoryRecord {
-        private Task task;
-        private HistoryRecord prev;
-        private HistoryRecord next;
+    public static class Node<T> {
+        private T data;
+        private Node<T> next;
+        private Node<T> prev;
 
-        private HistoryRecord(Task task) {
-            this.task = task;
+        public Node(T data) {
+            this.data = data;
+        }
+
+        // Геттеры и сеттеры для полей
+        public T getData() {
+            return data;
+        }
+
+        public void setData(T data) {
+            this.data = data;
+        }
+
+        public Node<T> getNext() {
+            return next;
+        }
+
+        public void setNext(Node<T> next) {
+            this.next = next;
+        }
+
+        public Node<T> getPrev() {
+            return prev;
+        }
+
+        public void setPrev(Node<T> prev) {
+            this.prev = prev;
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "data=" + data +
+                    ", next=" + next +
+                    ", prev=" + prev +
+                    '}';
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            HistoryRecord that = (HistoryRecord) o;
-            return task.equals(that.task);
+            Node<?> node = (Node<?>) o;
+            return Objects.equals(data, node.data) && Objects.equals(next, node.next) && Objects.equals(prev, node.prev);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(task);
+            return Objects.hash(data, next, prev);
         }
-
     }
 
-    private HistoryRecord head;
-    private HistoryRecord last;
-
-    private HashMap<Integer, HistoryRecord> historyRecordMap = new HashMap<>();
+    private Node<Task> head;
+    private Node<Task> tail;
+    private final HashMap<Integer, Node<Task>> historyMap = new HashMap<>();
 
     @Override
     public void add(Task task) {
         if (task == null) {
             return;
         }
-        addLast(task);
-        if (historyRecordMap.size() > 10) {
-            remove(head.task.getId());
+
+        remove(task.getId()); // Удаляем существующую запись, если она есть
+        linkLast(task);
+    }
+
+    private void linkLast(Task task) {
+        Node<Task> newNode = new Node<>(task);
+        if (tail == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.setNext(newNode);
+            newNode.setPrev(tail);
+            tail = newNode;
+        }
+        historyMap.put(task.getId(), newNode);
+    }
+
+    @Override
+    public void remove(int id) {
+        Node<Task> node = historyMap.remove(id);
+        if (node != null) {
+            removeNode(node);
         }
     }
 
-    private void remove(int id) {
-        final HistoryRecord oldHistoryRecord = historyRecordMap.remove(id);
-        if (oldHistoryRecord != null) {
-            if (oldHistoryRecord == head && oldHistoryRecord == last) {
-                head = null;
-                last = null;
-            } else if (oldHistoryRecord == head) {
-                head = oldHistoryRecord.next;
-                head.prev = null;
-            } else if (oldHistoryRecord == last) {
-                last = oldHistoryRecord.prev;
-                last.next = null;
-            } else {
-                oldHistoryRecord.prev.next = oldHistoryRecord.next;
-                oldHistoryRecord.next.prev = oldHistoryRecord.prev;
-            }
+    private void removeNode(Node<Task> node) {
+        if (node.getPrev() == null) {
+            head = node.getNext();
+        } else {
+            node.getPrev().setNext(node.getNext());
+        }
+
+        if (node.getNext() == null) {
+            tail = node.getPrev();
+        } else {
+            node.getNext().setPrev(node.getPrev());
         }
     }
 
     @Override
     public List<Task> getHistory() {
-        final List<Task> tasks = new ArrayList<>();
-        HistoryRecord current = head;
+        List<Task> history = new ArrayList<>();
+        Node<Task> current = head;
         while (current != null) {
-            tasks.add(current.task);
-            current = current.next;
+            history.add(current.getData());
+            current = current.getNext();
         }
-        return tasks;
-    }
-
-    private void addLast(Task task) {
-        remove(task.getId());
-
-        final HistoryRecord newHistoryRecord = new HistoryRecord(task);
-        if (head == null) {
-            head = newHistoryRecord;
-        } else {
-            last.next = newHistoryRecord;
-            newHistoryRecord.prev = last;
-        }
-        last = newHistoryRecord;
-        historyRecordMap.put(task.getId(), newHistoryRecord);
+        return history;
     }
 }
