@@ -10,9 +10,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestEpicController {
-    private EpicController epicController;
-    private Epic epic1;
-    private Epic epic2;
+    EpicController epicController;
+    Epic epic1;
+    Epic epic2;
 
     @BeforeEach
     void setUp() {

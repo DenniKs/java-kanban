@@ -8,7 +8,7 @@ import ru.yandex.javacourse.kanban.tasks.SubTask;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSubTask {
-    private SubTask subTask;
+    SubTask subTask;
 
     @BeforeEach
     void setUp() {

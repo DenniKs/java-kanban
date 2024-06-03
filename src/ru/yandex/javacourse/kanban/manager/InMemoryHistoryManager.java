@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    public static class Node<T> {
+    private static class Node<T> {
         private T data;
         private Node<T> next;
         private Node<T> prev;

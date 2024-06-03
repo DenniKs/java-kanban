@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTaskController {
-    private TaskController taskController;
-    private Task task1;
-    private Task task2;
+    TaskController taskController;
+    Task task1;
+    Task task2;
 
     @BeforeEach
     void setUp() {

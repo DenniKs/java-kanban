@@ -11,11 +11,11 @@ import ru.yandex.javacourse.kanban.tasks.SubTask;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSubTaskController {
-    private SubTaskController subTaskController;
-    private EpicController epicController;
-    private Epic epic1;
-    private SubTask subTask1;
-    private SubTask subTask2;
+    SubTaskController subTaskController;
+    EpicController epicController;
+    Epic epic1;
+    SubTask subTask1;
+    SubTask subTask2;
 
     @BeforeEach
     void setUp() {
@@ -36,68 +36,6 @@ public class TestSubTaskController {
         assertEquals(subTask1.getDescription(), addedSubTask.getDescription());
         assertEquals(subTask1.getEpicID(), addedSubTask.getEpicID());
     }
-
-//    @Test
-//    // Проверяет поиск подзадачи по идентификатору.
-//    void testFindById() {
-//        subTaskController.add(subTask1, epic1);
-//        SubTask foundSubTask = subTaskController.findById(subTask1.getId());
-//        assertEquals(subTask1, foundSubTask);
-//    }
-//
-//    @Test
-//    // Проверяет обновление подзадачи.
-//    void testUpdate() {
-//        subTaskController.add(subTask1, epic1);
-//        SubTask updatedSubTask = new SubTask("Updated SubTask 1", "Updated Description for SubTask 1", subTask1.getId(), epic1.getId());
-//        updatedSubTask.setStatus(Status.IN_PROGRESS);
-//        subTaskController.update(updatedSubTask);
-//        SubTask foundSubTask = subTaskController.findById(updatedSubTask.getId());
-//        assertEquals(updatedSubTask.getName(), foundSubTask.getName());
-//        assertEquals(updatedSubTask.getDescription(), foundSubTask.getDescription());
-//        assertEquals(updatedSubTask.getStatus(), foundSubTask.getStatus());
-//    }
-//
-//    @Test
-//    // Проверяет удаление подзадачи по идентификатору.
-//    void testDeleteById() {
-//        subTaskController.add(subTask1, epic1);
-//        subTaskController.deleteById(subTask1.getId());
-//        SubTask foundSubTask = subTaskController.findById(subTask1.getId());
-//        assertNull(foundSubTask);
-//    }
-//
-//    @Test
-//    // Проверяет удаление всех подзадач.
-//    void testDeleteAll() {
-//        subTaskController.add(subTask1, epic1);
-//        subTaskController.add(subTask2, epic1);
-//        subTaskController.deleteAll();
-//        List<SubTask> subTasks = subTaskController.findAllOfEpic(epic1);
-//        assertTrue(subTasks.isEmpty());
-//    }
-//
-//    @Test
-//    // Проверяет поиск всех подзадач эпика.
-//    void testFindAllOfEpic() {
-//        subTaskController.add(subTask1, epic1);
-//        subTaskController.add(subTask2, epic1);
-//        List<SubTask> subTasks = subTaskController.findAllOfEpic(epic1);
-//        assertEquals(2, subTasks.size());
-//        assertTrue(subTasks.contains(subTask1));
-//        assertTrue(subTasks.contains(subTask2));
-//    }
-//
-//    @Test
-//    // Проверяет обновление статуса эпика на основе статусов подзадач.
-//    void testRefreshStatus() {
-//        subTask1.setStatus(Status.NEW);
-//        subTask2.setStatus(Status.DONE);
-//        subTaskController.add(subTask1, epic1);
-//        subTaskController.add(subTask2, epic1);
-//        subTaskController.refreshStatus(subTask1);
-//        assertEquals(Status.IN_PROGRESS, epic1.getStatus());
-//    }
 
     @Test
     // Проверяет обновление статуса эпика при удалении всех подзадач.

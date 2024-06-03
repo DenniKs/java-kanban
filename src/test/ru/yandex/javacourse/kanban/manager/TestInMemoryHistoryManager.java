@@ -11,10 +11,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInMemoryHistoryManager {
-    private InMemoryHistoryManager historyManager;
-    private Task task1;
-    private Task task2;
-    private Task task3;
+    InMemoryHistoryManager historyManager;
+    Task task1;
+    Task task2;
+    Task task3;
 
     @BeforeEach
     void setUp() {

@@ -14,12 +14,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInMemoryTaskManager {
-    private InMemoryTaskManager taskManager;
-    private Task task1;
-    private Task task2;
-    private Epic epic1;
-    private SubTask subTask1;
-    private SubTask subTask2;
+    InMemoryTaskManager taskManager;
+    Task task1;
+    Task task2;
+    Epic epic1;
+    SubTask subTask1;
+    SubTask subTask2;
 
     @BeforeEach
     void setUp() {

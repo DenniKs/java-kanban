@@ -11,9 +11,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class TestEpic {
-    private Epic epic;
-    private SubTask subTask1;
-    private SubTask subTask2;
+    Epic epic;
+    SubTask subTask1;
+    SubTask subTask2;
 
     @BeforeEach
     void setUp() {
