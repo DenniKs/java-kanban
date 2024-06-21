@@ -8,9 +8,18 @@ public class Task {
     private String description;
     private Integer id;
     private Status status;
+    private String type;
 
     public Task() {
         this("Задача", null, -1, NEW);
+    }
+
+    public Task(String type, String name, String description, Integer id, Status status) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
+        this.status = status;
+        this.type = type;
     }
 
     public Task(String name, String description, Integer id) {
@@ -66,6 +75,10 @@ public class Task {
         this.status = status;
     }
 
+    public String getType() {
+        return type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,10 +98,19 @@ public class Task {
     @Override
     public String toString() {
         return "Task{" +
-                "name='" + name + '\'' +
+                "type='"  + type + '\'' +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    public String toStringFile() {
+        return         id +
+                "," + type +
+                "," + name +
+                "," + status +
+                "," + description;
     }
 }
