@@ -9,10 +9,10 @@ import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    public static TaskController taskController = new TaskController();
-    public static EpicController epicController = new EpicController();
-    public static SubTaskController subTaskController = new SubTaskController(epicController);
-    public static HistoryManager historyManager = Managers.getDefaultHistory();
+    public TaskController taskController = new TaskController();
+    public EpicController epicController = new EpicController();
+    public SubTaskController subTaskController = new SubTaskController(epicController);
+    public HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public ArrayList<Task> findAllTasks() {

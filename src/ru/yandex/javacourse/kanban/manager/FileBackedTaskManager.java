@@ -6,16 +6,16 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import static ru.yandex.javacourse.kanban.tasks.TaskType.*;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    public static File tasksStorage = new File("save.csv");
+    public File tasksStorage;
     private static final String FILE_HEADER = "id,type,name,status,description,epic";
+
+    public FileBackedTaskManager(File tasksStorage) {
+        this.tasksStorage = tasksStorage;
+    }
 
     @Override
     public Task addTask(Task task) {
@@ -109,34 +109,41 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public static FileBackedTaskManager loadFromFile(File storageTask) {
-        FileBackedTaskManager fileBackedTasksManager = new FileBackedTaskManager();
+        FileBackedTaskManager fileBackedTasksManager = new FileBackedTaskManager(storageTask);
         try (BufferedReader reader = new BufferedReader(new FileReader(storageTask, StandardCharsets.UTF_8))) {
             boolean readHistory = false;
             while (reader.ready()) {
                 String line = reader.readLine();
+                if (readHistory) {
+                    break;
+                }
                 if (line.isBlank()) {
                     readHistory = true;
-                } else if (readHistory) {
-                    break;
-                } else {
-                    String[] splitter = line.split(", ");
-                    TaskType type = TaskType.valueOf(splitter[0]);
-                    String name = splitter[1];
-                    String description = splitter[2];
-                    Integer id = Integer.parseInt(splitter[3]);
-                    Status status = Status.valueOf(splitter[4]);
+                    continue;
+                }
+                String[] splitter = line.split(", ");
+                TaskType type = TaskType.valueOf(splitter[0]);
+                String name = splitter[1];
+                String description = splitter[2];
+                Integer id = Integer.parseInt(splitter[3]);
+                Status status = Status.valueOf(splitter[4]);
 
-                    if (type == TASK) {
-                        taskController.getTasks().put(id,
+                switch (type) {
+                    case TASK:
+                        fileBackedTasksManager.taskController.getTasks().put(id,
                                 new Task("TASK", name, description, id, status));
-                    } else if (type == SUBTASK) {
+                        break;
+                    case SUBTASK:
                         Integer epicId = Integer.parseInt(splitter[5]);
-                        subTaskController.getSubTasks().put(id,
+                        fileBackedTasksManager.subTaskController.getSubTasks().put(id,
                                 new SubTask("SUBTASK", name, description, id, status, epicId));
-                    } else if (type == EPIC) {
-                        epicController.getEpics().put(id,
+                        break;
+                    case EPIC:
+                        fileBackedTasksManager.epicController.getEpics().put(id,
                                 new Epic("EPIC", name, description, id, status));
-                    }
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unknown type: " + type);
                 }
             }
         } catch (IOException e) {
