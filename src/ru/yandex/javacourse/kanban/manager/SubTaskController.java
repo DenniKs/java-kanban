@@ -17,7 +17,7 @@ public class SubTaskController {
     }
 
     public SubTask add(SubTask subTask, Epic epic) {
-        final SubTask newSubTask = new SubTask(subTask.getName(), subTask.getDescription(), ++counterIDSubTasks, epic.getId());
+        final SubTask newSubTask = new SubTask(subTask.getType(), subTask.getName(), subTask.getDescription(), ++counterIDSubTasks, subTask.getStatus(), epic.getId());
         if (!subTasks.containsKey(newSubTask.getId())) {
             subTasks.put(newSubTask.getId(), newSubTask);
             epicController.epics.get(epic.getId()).addSubTask(/*newSubTask.getId(),*/ newSubTask);
@@ -26,6 +26,10 @@ public class SubTaskController {
             return null;
         }
         return newSubTask;
+    }
+
+    public HashMap<Integer, SubTask> getSubTasks() {
+        return subTasks;
     }
 
     public SubTask findById(Integer id) {
@@ -67,6 +71,7 @@ public class SubTaskController {
     public void deleteAll() {
         subTasks.clear();
     }
+
     public void deleteSubTaskOfEpic() {
         for (Epic subTask : epicController.epics.values()) {
             subTask.clearSubTasks();

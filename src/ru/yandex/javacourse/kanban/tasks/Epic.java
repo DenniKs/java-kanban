@@ -9,6 +9,10 @@ public class Epic extends Task {
         super(name, description, id);
     }
 
+    public Epic(String type, String name, String description, Integer id, Status status) {
+        super(type, name, description, id, status);
+    }
+
     public ArrayList<SubTask> getSubTasks() {
         return new ArrayList<>(subTasks);
     }
@@ -31,5 +35,4 @@ public class Epic extends Task {
     public void clearSubTasks() {
         this.subTasks.clear();
     }
-
 }

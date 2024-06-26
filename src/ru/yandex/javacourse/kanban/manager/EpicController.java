@@ -9,6 +9,10 @@ public class EpicController {
     protected HashMap<Integer, Epic> epics = new HashMap<>();
     private Integer counterIDEpics = 0;
 
+    public HashMap<Integer, Epic> getEpics() {
+        return epics;
+    }
+
     public Epic findById(Integer id) {
         return epics.get(id);
     }
@@ -29,7 +33,7 @@ public class EpicController {
     }
 
     public Epic add(Epic task) {
-        final Epic newTask = new Epic(task.getName(), task.getDescription(), ++counterIDEpics);
+        final Epic newTask = new Epic(task.getType(), task.getName(), task.getDescription(), ++counterIDEpics, task.getStatus());
         if (!epics.containsKey(newTask.getId())) {
             epics.put(newTask.getId(), newTask);
         } else {
