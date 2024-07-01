@@ -33,16 +33,19 @@ public class Epic extends Task {
     // Метод для добавления подзадачи
     public void addSubTask(SubTask subTask) {
         this.subTasks.add(subTask);
+        updateDurationAndTime();
     }
 
     // Метод для удаления подзадачи
-    public boolean removeSubTask(SubTask subTask) {
-        return this.subTasks.remove(subTask);
+    public void removeSubTask(SubTask subTask) {
+        this.subTasks.remove(subTask);
+        updateDurationAndTime();
     }
 
     // Метод для полной очистки списка
     public void clearSubTasks() {
         this.subTasks.clear();
+        updateDurationAndTime();
     }
 
     @Override

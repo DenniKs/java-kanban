@@ -128,17 +128,10 @@ public class InMemoryTaskManager implements TaskManager {
 
         if (newStart == null || newEnd == null) return true;
 
-        for (Task task : prioritizedTasks) {
-            LocalDateTime taskStart = task.getStartTime();
-            LocalDateTime taskEnd = task.getEndTime();
-            if (taskStart != null && taskEnd != null) {
-                boolean overlap = newStart.isBefore(taskEnd) && newEnd.isAfter(taskStart);
-                if (overlap) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return prioritizedTasks.stream()
+                .map(task -> new LocalDateTime[] { task.getStartTime(), task.getEndTime() })
+                .noneMatch(taskTimes -> taskTimes[0] != null && taskTimes[1] != null &&
+                        newStart.isBefore(taskTimes[1]) && newEnd.isAfter(taskTimes[0]));
     }
 
     @Override
@@ -146,8 +139,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (isTimeSlotAvailable(task)) {
             prioritizedTasks.add(task);
             return taskController.add(task);
-        } else {
-            throw new IllegalArgumentException("Временной интервал запроса совпадает с существующей задачей");
         }
+        throw new IllegalArgumentException("Временной интервал запроса совпадает с существующей задачей");
     }
 }
