@@ -1,5 +1,7 @@
 package ru.yandex.javacourse.kanban.tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import static ru.yandex.javacourse.kanban.tasks.Status.NEW;
 
@@ -9,6 +11,8 @@ public class Task {
     private Integer id;
     private Status status;
     private String type;
+    private Duration duration;
+    private LocalDateTime startTime;
 
     public Task() {
         this("Задача", null, -1, NEW);
@@ -44,7 +48,18 @@ public class Task {
         this.name = task.name;
         this.description = task.description;
         this.id = task.id;
-        this.status = task.status;
+        this.type = task.type;
+        this.duration = task.duration;
+        this.startTime = task.startTime;
+        this.status = task.getStatus();
+    }
+
+    public Task(String name, String description, Status status, Duration duration, LocalDateTime startTime) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     public String getName() {
@@ -79,20 +94,43 @@ public class Task {
         return type;
     }
 
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Task)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(getName(), task.getName())
-                && Objects.equals(getDescription(), task.getDescription())
-                && Objects.equals(getId(), task.getId())
-                && Objects.equals(getStatus(), task.getStatus());
+        return Objects.equals(name, task.name)
+                && Objects.equals(description, task.description)
+                && Objects.equals(id, task.id)
+                && status == task.status
+                && Objects.equals(type, task.type)
+                && Objects.equals(duration, task.duration)
+                && Objects.equals(startTime, task.startTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getDescription(), getId(), getStatus());
+        return Objects.hash(name, description, id, status, type, duration, startTime) + 14;
     }
 
     @Override
