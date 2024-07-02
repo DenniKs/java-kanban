@@ -19,7 +19,7 @@ public interface TaskManager {
 
     Epic findEpicById(Integer id);
 
-    Task addTask(Task task);
+    Task addTask(Task task) throws IllegalArgumentException;
 
     SubTask addSubTask(SubTask subTask, Epic epic);
 
@@ -44,4 +44,9 @@ public interface TaskManager {
     Task deleteTaskById(Integer id);
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
+
+    boolean isTimeSlotAvailable(Task task);
+
 }
