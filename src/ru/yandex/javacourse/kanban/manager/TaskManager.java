@@ -13,6 +13,8 @@ public interface TaskManager {
 
     List<SubTask> findAllSubTasksOfEpic(Epic epic);
 
+    List<SubTask> findAllSubTasks();
+
     SubTask findSubTaskById(Integer id);
 
     Task findTaskById(Integer id);
@@ -22,6 +24,8 @@ public interface TaskManager {
     Task addTask(Task task) throws IllegalArgumentException;
 
     SubTask addSubTask(SubTask subTask, Epic epic);
+
+    SubTask addSubTask(SubTask subTask);
 
     Epic addEpic(Epic epic);
 

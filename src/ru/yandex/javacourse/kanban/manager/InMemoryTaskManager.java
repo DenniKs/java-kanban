@@ -32,6 +32,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public List<SubTask> findAllSubTasks() {
+        return subTaskController.findAll();
+    }
+
+    @Override
     public SubTask findSubTaskById(Integer id) {
         final SubTask subTask = subTaskController.findById(id);
         historyManager.add(subTask);
@@ -55,6 +60,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public SubTask addSubTask(SubTask subTask, Epic epic) {
         return subTaskController.add(subTask, epic);
+    }
+
+    @Override
+    public SubTask addSubTask(SubTask subTask) {
+        return subTaskController.add(subTask);
     }
 
     @Override
