@@ -10,7 +10,6 @@ import ru.yandex.javacourse.kanban.tasks.Task;
 import ru.yandex.javacourse.kanban.http.KVTaskClient;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class HTTPTaskManager extends FileBackedTaskManager {
@@ -57,14 +56,11 @@ public class HTTPTaskManager extends FileBackedTaskManager {
             JsonArray jsonHistoryAsJsonArray = jsonHistory.getAsJsonArray();
             for (JsonElement jsonId : jsonHistoryAsJsonArray) {
                 int id = jsonId.getAsInt();
-                List<Task> taskList = taskController.findAll();
-                List<SubTask> subTaskList = subTaskController.findAll();
-                List<Epic> epicList = epicController.findAll();
-                if (!taskList.isEmpty()) {
+                if (!taskController.findAll().isEmpty() && taskController.findAll().stream().anyMatch(task -> task.getId() == id)) {
                     this.findTaskById(id);
-                } else if (!subTaskList.isEmpty()) {
+                } else if (!subTaskController.findAll().isEmpty() && subTaskController.findAll().stream().anyMatch(subTask -> subTask.getId() == id)) {
                     this.findSubTaskById(id);
-                } else if (!epicList.isEmpty()) {
+                } else if (!epicController.findAll().isEmpty() && epicController.findAll().stream().anyMatch(epic -> epic.getId() == id)) {
                     this.findEpicById(id);
                 }
             }
