@@ -5,7 +5,9 @@ import ru.yandex.javacourse.kanban.tasks.Status;
 import ru.yandex.javacourse.kanban.tasks.SubTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class SubTaskController {
     private Integer counterIDSubTasks = 0;
@@ -18,13 +20,23 @@ public class SubTaskController {
 
     public SubTask add(SubTask subTask, Epic epic) {
         final SubTask newSubTask = new SubTask(subTask.getType(), subTask.getName(), subTask.getDescription(), ++counterIDSubTasks, subTask.getStatus(), epic.getId());
-        if (!subTasks.containsKey(newSubTask.getId())) {
-            subTasks.put(newSubTask.getId(), newSubTask);
-            epicController.epics.get(epic.getId()).addSubTask(/*newSubTask.getId(),*/ newSubTask);
-        } else {
+        if (subTasks.containsKey(newSubTask.getId())) {
             System.out.println("Задача с таким ID уже существует");
             return null;
         }
+        subTasks.put(newSubTask.getId(), newSubTask);
+        epicController.epics.get(epic.getId()).addSubTask(newSubTask);
+        return newSubTask;
+    }
+
+    public SubTask add(SubTask subTask) {
+        final SubTask newSubTask = new SubTask(subTask.getType(), subTask.getName(), subTask.getDescription(), ++counterIDSubTasks, subTask.getStatus(), subTask.getEpicID());
+        if (subTasks.containsKey(newSubTask.getId())) {
+            System.out.println("Задача с таким ID уже существует");
+            return null;
+        }
+        subTasks.put(newSubTask.getId(), newSubTask);
+        epicController.epics.get(subTask.getEpicID()).addSubTask(newSubTask);
         return newSubTask;
     }
 
@@ -34,6 +46,13 @@ public class SubTaskController {
 
     public SubTask findById(Integer id) {
         return subTasks.get(id);
+    }
+
+    public List<SubTask> findAll() {
+        if (subTasks.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return new ArrayList<>(subTasks.values());
     }
 
     public SubTask update(SubTask task) {

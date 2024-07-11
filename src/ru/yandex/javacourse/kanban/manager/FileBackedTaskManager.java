@@ -17,6 +17,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.tasksStorage = tasksStorage;
     }
 
+    public FileBackedTaskManager() {
+
+    }
+
     @Override
     public Task addTask(Task task) {
         super.addTask(task);
